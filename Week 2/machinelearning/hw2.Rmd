@@ -1,0 +1,107 @@
+---
+title: Math 156 Project 1
+author: Aatmun Baxi
+output: pdf_document
+---
+
+# Problem 1
+## Part 1
+
+Let \(k_{a}\left( \textbf{x}_{a},\textbf{x}_{a}' \right)=\Phi_{a}\left( \textbf{x}_{a} \right) ^{T}\Phi_{a}\left( \textbf{x}_{a}' \right),\, k_{b}\left( \textbf{x}_{b},\textbf{x}_{b}' \right)=\Phi_{b}\left( \textbf{x}_{b} \right) ^{T}\Phi_{b}\left( \textbf{x}_{b}' \right)\) so that \[
+k\left( \textbf{x},\textbf{x}' \right) = \Phi_{a}\left( \textbf{x}_{a} \right) ^{T}\Phi_{a}\left( \textbf{x}_{a}' \right) + \Phi_{b}\left( \textbf{x}_{b} \right)^{T}\Phi_{b}\left( \textbf{x}_{b}' \right)
+.\] 
+We claim that \(k\) is defined by a nonlinear feature space mapping \[
+\psi\left( \textbf{x} \right) = \left(\Phi_{a}\left( \textbf{x}_{a} \right), \Phi_{b}\left( \textbf{x}_{b} \right) \right)  
+.\] 
+where the subscripts \(a\) and \(b\) define the disjoint subsets of \(\textbf{x}\) as in the problem statement.
+This feature space mapping is valid as all components of \(\textbf{x}\) are present in the union of the sets \(\textbf{x}_{a},\,\textbf{x}_{b}.\) 
+
+Evaluating an inner product as block matrices, we get that \[
+\psi\left( \textbf{x} \right) ^{T}\psi\left( \textbf{x}' \right) = 
+\left( \Phi_{a}\left( \textbf{x}_{a} \right), \Phi_{b}\left( \textbf{x}_{b} \right)  \right)^{T}
+\left(\Phi_{a}\left( \textbf{x}'_{a} \right), \Phi_{b}\left( \textbf{x}'_{b} \right)\right)
+.\] 
+Note here that inner product is valid since we can transpose the block vector components individually to get valid inner products in the expansion of the above expression.
+i.e. \[
+\psi\left( \textbf{x} \right) ^{T}\psi\left( \textbf{x}' \right) = \left( \Phi_{a}\left( \textbf{x}_{a} \right), \Phi_{b}\left( \textbf{x}_{b} \right)  \right)^{T}
+\left( \Phi_{a}\left( \textbf{x}'_{a} \right), \Phi_{b}\left( \textbf{x}'_{b} \right)   \right)=  \Phi_{a}\left( \textbf{x}_{a} \right)^{T}\Phi_{a}\left( \textbf{x}_{a}' \right) 
++ 
+\Phi_{b}\left( \textbf{x}_{b} \right) ^{T}\Phi_{b}\left( \textbf{x}_{b}' \right)
+,\] 
+which is exactly \(k\left( \textbf{x},\textbf{x}' \right).\) 
+
+## Part 2
+
+Let \(\textbf{x}=\left( x_{1},x_{2} \right),\, \textbf{y}=\left( y_{1},y_{2} \right)\), so \[
+k\left( \textbf{x},\textbf{y} \right) = \left(x_{1}y_{1}+x_{2}y_{2}  \right) ^2=x_{1}^2y_{1}^2+2x_{1}x_{2}y_{1}y_{2}+x_{2}^2y_{2}^2
+.\] 
+From here it is clear that the mapping \[
+\Phi\left( \textbf{x} \right) = \left( x_{1}^2,\,\sqrt{2} x_{1}x_{2},\,x_{2}^2 \right) 
+\] 
+produces the expression for \(k\) when taking \(\Phi\left( \textbf{x} \right) ^{T}\Phi\left( \textbf{y} \right). \) 
+
+# Problem 2
+
+The log likelihood of the model is \[
+F\left( \mathbf{w} \right) =\frac{-\beta}{2} \sum_{n=1}^{N} \left[ y\left( x_{n},\mathbf{w} \right) -t_{n} \right] ^2+\frac{N}{2} \ln \beta -\frac{N}{2} \ln 2\pi
+.\] 
+To maximize we differentiate \(F\) with respect to each component of \(\mathbf{w}\) \(w_1,\ldots,w_{M}\).
+To compute this we compute the general partial derivatives of \(y\) with respect to each of the components \(w_1,\ldots,w_{M}.\) \[
+\frac{\partial y}{\partial w_{i}} = x^{i}\quad\quad i=0,\ldots,M
+.\]  
+Therefore \[
+\frac{\partial F}{\partial x} =-\beta \sum_{n=1}^{N} \left[ y\left( x_{n},\mathbf{w} \right)  -t_{n}\right] x_{n}^{i}\quad\quad i=1,\ldots,M
+.\] 
+Setting each of these partials equal to \(0\) we get 
+\begin{align*}
+	0&= -\beta \sum_{n=1}^{N} \left[ y\left( x_{n},\mathbf{w} \right)  -t_{n}\right]x_{n}^{i}  \quad\quad i=1,\ldots,M\\
+	\sum_{n=1}^{N} t_{n}x_{n}^{i}&= \sum_{n=1}^{N} x_{n}^{i}y\left( x_{n},\mathbf{w} \right) \quad\quad i=1,\ldots,M \\
+	\sum_{n=1}^{N} t_{n}x_{n}^{i}&= \sum_{n=1}^{N} x_{n}^{i}\sum_{j=0}^{M} w_{j}x_{n}^{j} \quad\quad i=1,\ldots,M \\
+	\sum_{n=1}^{N} t_{n}x_{n}^{i}&= \sum_{n=1}^{N}\sum_{j=0}^{M} w_{j}x_{n}^{i+j} \quad\quad i=1,\ldots,M \\
+	\sum_{n=1}^{N} t_{n}x_{n}^{i}&= \sum_{j=0}^{M}\sum_{i=1}^{N} w_{j}x_{n}^{i+j} \quad\quad i=1,\ldots,M \\
+	\iff T_{i}&= \sum_{j=0}^{ M} A_{ij}w_{j}
+\end{align*}
+
+
+# Problem 3
+
+Let \(A\in M_{n}\left( \mathbf{R} \right) \).
+Suppose \(v\in \text{Im}\left( A \right) \) so there exists \(w\in \textbf{R}^{n}\) such that \(v=Aw.\) 
+Then \[
+A\left( A^{T}A \right) ^{-1}A^{T}v=A\left( A^{T}A \right) ^{-1}A^{T}Aw=A\mathbf{1}_{n}w=Aw=v
+\] 
+so the claimed projection matrix leaves elements in the image of \(A\) alone.
+Now suppose \(v\in \text{Im}\left( A \right) ^{\perp}.\) 
+By rank nullity theorem this means that \(v\in \text{Ker}\left( A^{T} \right) .\) 
+So \[
+A\left( A^{T}A \right) ^{-1}A^{T}w=0
+,\] 
+which is consistent with the behavior of orthogonal projections of  vectors onto orthogonal spaces.
+
+# Problem 4
+
+We differentiate in \(\mathbf{w}\) and set equal to \(\textbf{0},\) solving for \(\mathbf{w} :\) 
+
+\begin{align*}
+	E_{D}\left( \mathbf{w}  \right) &=\frac{1}{2} \sum_{n=1}^{N} r_{n}\{t_{n}-\mathbf{w} ^{T} \phi\left( \mathbf{x}_{n} \right) \}: \\
+	E'_{D}\left( \mathbf{w}  \right) &= \left( \sum_{n=1}^{N} r_{n}\{t_{n}-\mathbf{w} ^{T}\phi\left( \mathbf{x}_{n} \right) \}  \right) \left( -2\left( t_{n}-\mathbf{w}^{T}\phi\left( \mathbf{x}_{n} \right)  \right) \phi\left( \mathbf{x}_{n} \right)  \right) \\
+	\mathbf{0} &= \left( \sum_{n=1}^{N} r_{n}\{t_{n}-\mathbf{w} ^{T}\phi\left( \mathbf{x}_{n} \right) \}  \right) \left( -2\left( t_{n}-\mathbf{w}^{T}\phi\left( \mathbf{x}_{n} \right)  \right)\phi\left( \mathbf{x}_{n} \right)   \right) \\
+	\mathbf{0} &= \left( \sum_{n=1}^{N} r_{n}\{t_{n}-\mathbf{w} ^{T}\phi\left( \mathbf{x}_{n} \right) \}  \right) \left( -2t_{n}+2\mathbf{w}^{T}\phi\left( \mathbf{x}_{n} \right)  \right) \phi\left( \mathbf{x}_{n} \right) \\
+	\mathbf{0} &= \left( \sum_{n=1}^{N} r_{n}\{t_{n}-\mathbf{w} ^{T}\phi\left( \mathbf{x}_{n} \right) \}  \right)\phi\left( \mathbf{x}_{n} \right) \\
+	\mathbf{0}^{T} &= \left( \sum_{n=1}^{N} r_{n}\{t_{n}-\mathbf{w} ^{T}\phi\left( \mathbf{x}_{n} \right) \}  \right)\phi\left( \mathbf{x}_{n} \right) ^{T}\\
+	\mathbf{0}^{T}&= \sum_{n=1}^{N} r_{n}t_{n}\phi^{T}\left( \mathbf{x}_{n} \right) -\sum_{n=1}^{N} r_{n}\mathbf{w}^{T}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}  \\
+	 \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right)^{T} &=\sum_{n=1}^{N} r_{n}\mathbf{w}^{T}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}  \\
+	 \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right) &=\sum_{n=1}^{N} r_{n}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}\mathbf{w}  \\
+	 \mathbf{w}&=\left( \sum_{n=1}^{N} r_{n}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}  \right)  ^{-1}
+\left( \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right)  \right)\end{align*}
+
+# Problem 4
+
+### Final part
+Using equation \(\left( 1 \right) \) we have
+\begin{align*}
+	\left( w_{n}^{\left( k+1 \right) } \right)^{T}\mathbf{x}_{n}&= \left( \left( \mathbf{w}^{\left( k \right) } \right)^{T}+\frac{\left( t_{n}-\left( \mathbf{w}^{\left(k \right) }\right) ^{T} \right) \mathbf{x}_{n}}{\|\mathbf{x}_{n}\|^2}\mathbf{x}_{n}^{T}    \right)\mathbf{x}_{n}  \\
+	\left( w_{n}^{\left( k+1 \right) } \right)^{T}\mathbf{x}_{n}&=  \left( \mathbf{w}^{\left( k \right) } \right)^{T}\mathbf{x}_{n}+\frac{\left( t_{n}-\left( \mathbf{w}^{\left(k \right) }\right) ^{T}\mathbf{x}_{n}  \right)}{\|\mathbf{x}_{n}\|^2} \mathbf{x}_{n}^{T}\mathbf{x}_{n}  \\
+	\left( w_{n}^{\left( k+1 \right) } \right)^{T}\mathbf{x}_{n}&=  \left( \mathbf{w}^{\left( k \right) } \right)^{T}\mathbf{x}_{n}+\left( t_{n}-\left( \mathbf{w}^{\left(k \right) }\right) ^{T}\mathbf{x}_{n}  \right)\\
+	\left( w_{n}^{\left( k+1 \right) } \right)^{T}\mathbf{x}_{n}&= t_{n}.
+\end{align*}
