@@ -66,10 +66,10 @@ def longestpath(d):
 
 # d1 = {"a":"b","b":"c"}
 # d2 = {"a":"b","b":"c","c":"d","e":"a","f":"a","d":"b"}
-#d3 = {"a":"b", "b":"c", "c":"d", "z":"h", "h":"g" ,"g":"e", "e":"a", "f":"a", "d":"b"}
+# d3 = {"a":"b", "b":"c", "c":"d", "z":"h", "h":"g" ,"g":"e", "e":"a", "f":"a", "d":"b"}
 # print("d1:", longestpath(d1))
 # print("d2:", longestpath(d2))
-#print("d3:", longestpath(d3))
+# print("d3:", longestpath(d3))
 
 def solve( f, gs , tol = 0.0001):
     """
@@ -91,19 +91,19 @@ def solve( f, gs , tol = 0.0001):
     # Else try to continue
     else:
         try:
-            return solve(f, gs - ( f(gs)[0] / f(gs)[1] ),tol)
+            return solve(f, gs - ( f(gs)[0] / f(gs)[1] ), tol)
         # Throw exception if f'(x_n)=0
         except ZeroDivisionError as ze:
             return "zero division error", ze
 
-#print(solve(lambda x: [x**2-1, 2*x], 3, 0.0001))
-#  Result: 1.0000305180437934
+# print(solve(lambda x: [x**2-1, 2*x], 3, 0.0001))
+# #  Result: 1.0000305180437934
 
 # print(solve(lambda x: [x**2-1, 2*x], -1, 0.0001))
-#  Result: -1
+# #  Result: -1
 
-#print(solve(lambda x: [exp(x)-1, exp(x)], 1, 0.0001))
-#  Result: 1.5641107898984284e-06
+# print(solve(lambda x: [exp(x)-1, exp(x)], 1, 0.0001))
+# #  Result: 1.5641107898984284e-06
 
 # print(solve(lambda x: [sin(x), cos(x)], 0.5, 0.0001))
-#  Result: 3.311802132639069e-05
+# #  Result: 3.311802132639069e-05

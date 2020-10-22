@@ -1,5 +1,5 @@
 ---
-title: Math 156 Project 1
+title: Math 156 Project 2
 author: Aatmun Baxi
 output: pdf_document
 ---
@@ -50,7 +50,7 @@ To compute this we compute the general partial derivatives of \(y\) with respect
 \frac{\partial y}{\partial w_{i}} = x^{i}\quad\quad i=0,\ldots,M
 .\]  
 Therefore \[
-\frac{\partial F}{\partial x} =-\beta \sum_{n=1}^{N} \left[ y\left( x_{n},\mathbf{w} \right)  -t_{n}\right] x_{n}^{i}\quad\quad i=1,\ldots,M
+\frac{\partial F}{\partial w_{i}} =-\beta \sum_{n=1}^{N} \left[ y\left( x_{n},\mathbf{w} \right)  -t_{n}\right] x_{n}^{i}\quad\quad i=1,\ldots,M
 .\] 
 Setting each of these partials equal to \(0\) we get 
 \begin{align*}
@@ -65,18 +65,17 @@ Setting each of these partials equal to \(0\) we get
 
 # Problem 3
 
-Let \(A\in M_{n}\left( \mathbf{R} \right) \).
-Suppose \(v\in \text{Im}\left( A \right) \) so there exists \(w\in \textbf{R}^{n}\) such that \(v=Aw.\) 
-Then \[
-A\left( A^{T}A \right) ^{-1}A^{T}v=A\left( A^{T}A \right) ^{-1}A^{T}Aw=A\mathbf{1}_{n}w=Aw=v
-\] 
-so the claimed projection matrix leaves elements in the image of \(A\) alone.
-Now suppose \(v\in \text{Im}\left( A \right) ^{\perp}.\) 
-By rank nullity theorem this means that \(v\in \text{Ker}\left( A^{T} \right) .\) 
+It's enough to show that \(A\left( A^{T}A \right) ^{-1}A^{T}\) fixes vectors in \(\text{Im}\left( A \right) \) and vectors in \(\text{Im}\left( A \right) ^{\perp}\) are mapped to \(0,\) as this uniquely characterizes the orthogonal projection of a vector onto the column space of \(A.\) 
+
+Suppose \(v\in \text{Im}\left( A \right) .\) 
+Then there is \(w\) such that \(v=Aw.\)
 So \[
-A\left( A^{T}A \right) ^{-1}A^{T}w=0
-,\] 
-which is consistent with the behavior of orthogonal projections of  vectors onto orthogonal spaces.
+A\left(A^{T}A \right) ^{-1}A^{T}Aw=A\mathbf{1}_{n}w=:v
+.\] 
+On the other hand if \(v\in \text{Im}\left( A \right) ^{\perp},\) then by the rank nullity theorem, \(v\in \ker\left( A^{T} \right) \), so \[
+A\left( A^{T}A \right) ^{-1}A^{T}v=\mathbf{0}
+.\] 
+
 
 # Problem 4
 
@@ -93,12 +92,102 @@ We differentiate in \(\mathbf{w}\) and set equal to \(\textbf{0},\) solving for 
 	 \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right)^{T} &=\sum_{n=1}^{N} r_{n}\mathbf{w}^{T}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}  \\
 	 \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right) &=\sum_{n=1}^{N} r_{n}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}\mathbf{w}  \\
 	 \mathbf{w}&=\left( \sum_{n=1}^{N} r_{n}\phi\left( \mathbf{x}_{n} \right)\phi\left( \mathbf{x}_{n} \right) ^{T}  \right)  ^{-1}
-\left( \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right)  \right)\end{align*}
+\left( \sum_{n=1}^{N} r_{n}t_{n}\phi\left( \mathbf{x}_{n} \right)  \right)
+\end{align*}
 
-# Problem 4
+# Problem 5
+
+```{python}
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from random import randint
+
+df = pd.read_csv("winequality-red.csv",sep=";",header=0)
+
+####################################################
+##           Closed-form solution                 ##
+####################################################
+
+# Place data in design matrix
+X =  np.array( df.iloc[:, :11] )
+
+# Complete linear basis function model
+X = np.insert(X , 0, 1,axis=1)
+# Target vector
+t = np.array( df['quality'])
+
+# Compute Moore-Penrose pseudoinverse of design matrix
+pinv = np.linalg.pinv( X )
+
+# Compute w_star according to closed form solution 
+w_star = np.matmul( pinv , t)
+
+# Compute average error of closed form
+normed = np.subtract( np.matmul( X , w_star ) , t )
+error = (np.linalg.norm(normed)**2 ) / 1599
+
+
+
+###################################################
+##            Algorithmic Implementation         ##
+###################################################
+
+# Number of algorithm iterations to run
+iters = 100_000
+
+w_k = np.zeros(12,float)
+errors = np.zeros(iters,float)
+
+# Initial error is just norm of optimal
+errors[0] = np.linalg.norm(w_star )
+
+# Iterate algorithm
+for i in range(1,iters):
+
+    # Sample data randomly
+    n = randint(0,len(X)-1)
+
+    # Compute coefficients of x_n in equation (1)
+    eta_term = 1 / ( ( np.linalg.norm( X[n] ))**2 )
+    num_coeff = t[n] - np.dot( w_k , X[n])
+    coeff = num_coeff * eta_term
+
+    # Update w_k
+    w_k = np.add(w_k , (X[n] * coeff) )
+
+    # Load error term
+    errors[i] = np.linalg.norm( np.subtract( w_star , w_k))
+
+# Compute average error for algorithm run
+normed_alg = np.subtract( np.matmul( X , w_k ) , t )
+error_alg = ( np.linalg.norm(normed_alg)**2 ) / (len(X))
+
+# Plot distance over iterates
+itvl = np.linspace(0,iters,num=len(errors))
+plt.plot(itvl,errors)
+plt.xlabel('iterations')
+plt.ylabel('||w* - w_k||')
+
+plt.show(block=False)
+
+print("First 5 entries of w_star")
+for i in range(0,5):
+    print (w_star[i],",")
+
+print("Error from closed form:",error )
+print("Error of algorithm:",error_alg)
+
+```
+
+### Thoughts on Optimal error
+Given the quality ratings of the wines are between 0 and 9, an error of < 0.5 seems perfectly reasonable for our value of \(N\), which leads me to believe that this is a fairly good model
+
+The iterative implementation showed wild fluctuations in the possible error of the model after 100,000 iterations, on the other hand. So it is clear that the closed form solution is superior given the other inputs in the algorithm like step size.
 
 ### Final part
 Using equation \(\left( 1 \right) \) we have
+
 \begin{align*}
 	\left( w_{n}^{\left( k+1 \right) } \right)^{T}\mathbf{x}_{n}&= \left( \left( \mathbf{w}^{\left( k \right) } \right)^{T}+\frac{\left( t_{n}-\left( \mathbf{w}^{\left(k \right) }\right) ^{T} \right) \mathbf{x}_{n}}{\|\mathbf{x}_{n}\|^2}\mathbf{x}_{n}^{T}    \right)\mathbf{x}_{n}  \\
 	\left( w_{n}^{\left( k+1 \right) } \right)^{T}\mathbf{x}_{n}&=  \left( \mathbf{w}^{\left( k \right) } \right)^{T}\mathbf{x}_{n}+\frac{\left( t_{n}-\left( \mathbf{w}^{\left(k \right) }\right) ^{T}\mathbf{x}_{n}  \right)}{\|\mathbf{x}_{n}\|^2} \mathbf{x}_{n}^{T}\mathbf{x}_{n}  \\

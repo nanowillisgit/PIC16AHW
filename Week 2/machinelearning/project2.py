@@ -5,6 +5,9 @@ from random import randint
 
 df = pd.read_csv("winequality-red.csv",sep=";",header=0)
 
+#################################################### ##           Closed-form solution                 ##
+####################################################
+
 # Place data in design matrix
 X =  np.array( df.iloc[:, :11] )
 
@@ -32,13 +35,13 @@ error = (np.linalg.norm(normed)**2 ) / 1599
 print("Optimal error from closed form:" ,error,"\n")
 
 
-#######################################################
-#            Algorithmic Implementation
-#######################################################
+###################################################
+##            Algorithmic Implementation         ##
+###################################################
 
 
 # Number of algorithm iterations to run
-iters = 100000
+iters = 100_000
 
 w_k = np.zeros(12,float)
 errors = np.zeros(iters,float)
@@ -47,10 +50,10 @@ errors = np.zeros(iters,float)
 errors[0] = np.linalg.norm(w_star )
 
 # Iterate algorithm
-for i in range(1,iters):
+for i in range(1,iters+1):
 
     # Sample data randomly
-    n = randint(1,len(X)-1)
+    n = randint(0,len(X)-1)
 
     # Compute coefficients of x_n in equation (1)
     eta_term = 1 / ( ( np.linalg.norm( X[n] ))**2 )
@@ -65,7 +68,7 @@ for i in range(1,iters):
 
 # Compute and print average error for algorithm run
 normed_alg = np.subtract( np.matmul( X , w_k ) , t )
-error_alg = (np.linalg.norm(normed_alg)**2 ) / (len(X))
+error_alg = ( np.linalg.norm(normed_alg)**2 ) / (len(X))
 print("Average error of algorithm:",error_alg)
 
 
@@ -73,6 +76,6 @@ print("Average error of algorithm:",error_alg)
 itvl = np.linspace(0,iters,num=len(errors))
 plt.plot(itvl,errors)
 plt.xlabel('iterations')
-plt.ylabel('||w* and w_k||')
+plt.ylabel('||w* - w_k||')
 
 plt.show()
