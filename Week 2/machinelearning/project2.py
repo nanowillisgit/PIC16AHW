@@ -5,7 +5,8 @@ from random import randint
 
 df = pd.read_csv("winequality-red.csv",sep=";",header=0)
 
-#################################################### ##           Closed-form solution                 ##
+#################################################### 
+##           Closed-form solution                 ##
 ####################################################
 
 # Place data in design matrix

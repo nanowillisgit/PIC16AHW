@@ -3,15 +3,14 @@
 """
 Implementation of custom linked list class
 Submission for homework 3
-"""
-"""
+
 @author: Aatmun Baxi
 @created: 10-27-20
 """
 class Node:
     """Node class for storing data and next pointer for LinkedList class"""
     def __init__(self,dt):
-        """Initializer for class, initializes data and pointer to next node as None"""
+        """Initializer for class, initializes data and 'pointer' to next node as None"""
         self.data = dt
         self.next = None
 
@@ -27,8 +26,7 @@ class Node:
 class LinkedList:
     """Custom implementation of linked list object"""
     def __init__(self,dt):
-        """
-        Initializes linked list object with a single node containing dt
+        """Initializes linked list object with a single node containing dt
 
         Params
             dt (arbitrary type): data for first node to store
@@ -39,8 +37,7 @@ class LinkedList:
         self.n = 1
 
     def append(self,dt):
-        """
-        Appends new node to list
+        """Appends new node to list
 
         Params
             dt (arbitrary type): data for first node to store
@@ -50,44 +47,43 @@ class LinkedList:
         self.last = new
         self.n += 1
 
-    #def __iter__(self):
-        #self.index = 0
-        #self.current = self.first
-        #return self
+    # def __iter__(self):
+        # self.index = 0
+        # self.current = self.first
+        # return self
 
-    #def __next__(self):
-        #if self.index == ( self.n ):
-            #raise StopIteration
-        #self.index = self.index + 1
-        #to_return = self.current.data
-        #self.current = self.current.next
-        #return to_return
+    # def __next__(self):
+        # if self.index == ( self.n ):
+            # raise StopIteration
+        # self.index = self.index + 1
+        # to_return = self.current.data
+        # self.current = self.current.next
+        # return to_return
 
     def __iter__(self):
-        """
-        Allows iteration through linked list
+        """Iteration through linked list
 
         Returns
-            Value of each node as generated object
+            Generator looping forward through list
         """
         return self.generator()
 
     def generator(self):
-        """
-        Generator for data stored in each node of list
+        """Generator for data stored in each node of list
 
         Returns
             (Node.data dtype) Yielded value in generator
         """
         self.current = self.first
         for i in range(0,self.n):
-            yielded = self.current.data
+            # Thing to yield
+            yld = self.current.data
+            # Update current node for next generation
             self.current = self.current.next
-            yield yielded
+            yield yld
 
     def __str__(self):
-        """
-        Gives string representation of linked list
+        """Gives string representation of linked list
 
         Returns
             (string) string of linked list
@@ -101,8 +97,7 @@ class LinkedList:
 
 
     def __repr__(self):
-        """
-        Gives representation of linked list
+        """Gives representation of linked list
 
         Returns
             (string) representation of linked list
@@ -110,8 +105,7 @@ class LinkedList:
         return f"'{str(self)}'"
 
     def __len__(self):
-        """
-        Abstracts len method for linked list
+        """Abstracts len method for linked list
 
         Returns
             (int) length of list
@@ -119,8 +113,7 @@ class LinkedList:
         return self.n
 
     def __getitem__(self, key):
-        """
-        Allows for random access of linked list nodes
+        """Allows for random access of linked list nodes
 
         Params
             key (int): index to subscript linked list by
@@ -133,7 +126,7 @@ class LinkedList:
             raise TypeError(f'LinkedList cannot be indexed with {type(key)}')
         ## IndexError if out of bounds
         if key > (self.n - 1):
-            raise IndexError('LinkedList index out of range')
+            raise IndexError('list index out of range')
 
         ## Return index of LinkedList
         curr = self.first
@@ -147,8 +140,7 @@ class LinkedList:
         #return items[key]
 
     def __setitem__(self, key, newval):
-        """
-        Allows for random assignment
+        """Random assignment
 
         Params
             key (int): index to subscript linked list by
@@ -168,8 +160,7 @@ class LinkedList:
         current.data = newval
 
     def __add__(self, s):
-        """
-        Binary + operation of linked list with arbitrary data type
+        """Binary + operation of linked list with arbitrary data type
 
         Params
             s (arbitrary): new data to be added to list

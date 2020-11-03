@@ -1,0 +1,45 @@
+---
+title: Math 156 Project 3
+author: Aatmun Baxi
+output: pdf_document
+---
+
+# Problem 1
+Suppose we have \(\mathbf{v},\mathbf{x}\) as two vectors in the decision plane.
+Then \[
+\mathbf{w}^{T}\mathbf{x}+w_0=\mathbf{w}^{T}\mathbf{v}+w_{0}=0
+\] 
+by definition.
+So that \[
+\mathbf{w}^{T}\left( \mathbf{v}-\mathbf{x} \right) =0 \implies \mathbf{v}-\mathbf{x}\perp \mathbf{w}
+.\] 
+
+# Problem 2
+## Part 1
+\(\mathbf{w}_{1},\mathbf{w}_{2}\) correctly classifying \(\mathbf{x}_{1}\) means that \(\text{sign}\left( \mathbf{w}_{1}^{T}\mathbf{x}_{1} \right) =\text{sign}\left( \mathbf{w}_{2}^{T}\mathbf{x}_{1} \right) =1.\) 
+Consider \(y\left( \mathbf{x}_{1},\lambda \mathbf{w}_{1}+\left( 1-\lambda \right) \mathbf{w}_{2} \right) \).
+We have 
+\begin{align*}
+	y\left( \mathbf{x}_{1},\lambda \mathbf{w}_{1}+\left( 1-\lambda \right) \mathbf{w}_{2} \right) &= \text{sign}\left( \lambda \mathbf{w}_{1}^{T}\mathbf{x}_{1}+\left( 1-\lambda \right) \mathbf{w}_{2}^{T}\mathbf{x}_{1} \right).
+\end{align*}
+Suppose that \(\mathbf{w}_{1}^{T}\mathbf{x}_{1}=a,\, \mathbf{w}_{2}^{T}\mathbf{x}_{1}=b\) where by assumption, \(a,b > 0.\)
+Then we have \[
+	\lambda a+\left( 1-\lambda \right)b > 0
+\] 
+since \(\lambda \in \left[ 0,1 \right] \).
+So \[
+\text{sign}\left( \lambda\mathbf{w}_{1}^{T}\mathbf{x}_{1}+\left( 1-\lambda \right) \mathbf{w}_{2}^{T}\mathbf{x}_{1} \right) =1
+.\] 
+So convex combinations of \(\mathbf{w}_{i}\) correctly classify \(\mathbf{x}_{1}\).
+
+## Part 2
+
+# Problem 3
+Let \(\mathbf{v}=\sum_{i=1}^{N} \alpha_{i}\mathbf{x}_{i}\) be in the convex hull of \(\{\mathbf{x}_{i}\}. \) 
+By linearity of linear discriminant functions over convex combinations, we have 
+\begin{align*}
+	y\left( \mathbf{v} \right) &= y\left( \sum_{i=1}^{N} \alpha_{i}\mathbf{x}_{i} \right)  \\
+	&= \sum_{i=1}^{N} \alpha_{i}y\left( \mathbf{x}_{i} \right)  \\
+	&> 0
+\end{align*}
+by assumption.
